@@ -3,3 +3,6 @@
 
 #include "Public/MeowsqueradeGameState.h"
 
+#include "MeowsqueradePlayerState.h"
+#include "GameFramework/PlayerState.h"
+

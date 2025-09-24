@@ -15,7 +15,15 @@ class AMeowsqueradeGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	
 	AMeowsqueradeGameMode();
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+protected:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game", meta=(AllowPrivateAccess="true"))
+	bool bIsFirstPlayerMouse = true; 
 };
 
 
