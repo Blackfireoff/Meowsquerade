@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "MeowsqueradeGameMode.h"
+#include "Public/MeowsqueradeGameMode.h"
 
 AMeowsqueradeGameMode::AMeowsqueradeGameMode()
 {

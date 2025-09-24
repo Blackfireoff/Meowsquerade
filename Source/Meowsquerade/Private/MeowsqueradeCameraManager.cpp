@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 
-#include "MeowsqueradeCameraManager.h"
+#include "Public/MeowsqueradeCameraManager.h"
 
 AMeowsqueradeCameraManager::AMeowsqueradeCameraManager()
 {

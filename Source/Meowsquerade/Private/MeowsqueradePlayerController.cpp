@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 
-#include "MeowsqueradePlayerController.h"
+#include "Public/MeowsqueradePlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "InputMappingContext.h"
-#include "MeowsqueradeCameraManager.h"
+#include "Public/MeowsqueradeCameraManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Meowsquerade.h"
 #include "Widgets/Input/SVirtualJoystick.h"
