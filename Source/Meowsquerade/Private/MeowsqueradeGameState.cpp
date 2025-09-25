@@ -21,6 +21,7 @@ void AMeowsqueradeGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 
 void AMeowsqueradeGameState::IncrementTaskCount()
 {
+	if (!HasAuthority()) return;
 	++TaskCount;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Incrementing task count : %d"), TaskCount));
 	UE_LOG(LogTemp, Warning, TEXT("Incrementing task count : %d"), TaskCount);
@@ -28,7 +29,7 @@ void AMeowsqueradeGameState::IncrementTaskCount()
 
 void AMeowsqueradeGameState::DecrementTaskCount()
 {
-	if (TaskCount == 0) return;
+	if (!HasAuthority() || TaskCount == 0) return;
 
 	--TaskCount;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Decrementing task count : %d"), TaskCount));
@@ -42,6 +43,7 @@ void AMeowsqueradeGameState::DecrementTaskCount()
 
 void AMeowsqueradeGameState::MouseWinGame()
 {
+	if (!HasAuthority()) return;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Les MOUSE ont gagné !"));
 	if (AMeowsqueradeGameMode* MeowsqueradeGameMode = Cast<AMeowsqueradeGameMode>(UGameplayStatics::GetGameMode(this)))
 	{
