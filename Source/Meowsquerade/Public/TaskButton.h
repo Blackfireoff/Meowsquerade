@@ -15,6 +15,9 @@ class MEOWSQUERADE_API ATaskButton : public AActor
 public:
 	// Sets default values for this actor's properties
 	ATaskButton();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* StaticMesh;
 
 protected:
 	// Called when the game starts or when spawned

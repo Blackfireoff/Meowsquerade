@@ -136,12 +136,15 @@ void AMeowsqueradeCharacter::InteractInput()
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
+	UE_LOG(LogTemp, Warning, TEXT("Line Trace Start: %s, End: %s"), *Start.ToString(), *End.ToString());
+	
 	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
 	{
 		if (ATaskButton* HitTaskButton = Cast<ATaskButton>(Hit.GetActor()))
 		{
 			if (AMeowsqueradePlayerController* PC = Cast<AMeowsqueradePlayerController>(GetController()))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Hit Task Button: %s"), *HitTaskButton->GetName());
 				PC->ServerActivateTask(HitTaskButton);
 			}
 		}
