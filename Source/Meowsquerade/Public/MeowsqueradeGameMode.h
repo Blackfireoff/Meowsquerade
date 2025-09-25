@@ -22,8 +22,9 @@ public:
 
 protected:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game", meta=(AllowPrivateAccess="true"))
-	bool bIsFirstPlayerMouse = true; 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game")
+	bool bIsFirstPlayerMouse = true;
+	
 };
 
 

@@ -9,6 +9,8 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Meowsquerade.h"
+#include "MeowsqueradePlayerController.h"
+#include "TaskButton.h"
 
 AMeowsqueradeCharacter::AMeowsqueradeCharacter()
 {
@@ -59,6 +61,9 @@ void AMeowsqueradeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMeowsqueradeCharacter::LookInput);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AMeowsqueradeCharacter::LookInput);
+
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AMeowsqueradeCharacter::InteractInput);
 	}
 	else
 	{
@@ -117,4 +122,28 @@ void AMeowsqueradeCharacter::DoJumpEnd()
 {
 	// pass StopJumping to the character
 	StopJumping();
+}
+
+void AMeowsqueradeCharacter::InteractInput()
+{
+	FVector Start;
+	FRotator Rotation;
+	GetController()->GetPlayerViewPoint(Start, Rotation);
+
+	FVector End = Start + (Rotation.Vector() * 300.f);
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
+	{
+		if (ATaskButton* HitTaskButton = Cast<ATaskButton>(Hit.GetActor()))
+		{
+			if (AMeowsqueradePlayerController* PC = Cast<AMeowsqueradePlayerController>(GetController()))
+			{
+				PC->ServerActivateTask(HitTaskButton);
+			}
+		}
+	}
 }

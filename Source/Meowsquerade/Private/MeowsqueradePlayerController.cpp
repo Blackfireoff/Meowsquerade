@@ -8,12 +8,25 @@
 #include "Public/MeowsqueradeCameraManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Meowsquerade.h"
+#include "TaskButton.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
 AMeowsqueradePlayerController::AMeowsqueradePlayerController()
 {
 	// set the player camera manager class
 	PlayerCameraManagerClass = AMeowsqueradeCameraManager::StaticClass();
+}
+
+void AMeowsqueradePlayerController::ServerActivateTask_Implementation(AActor* Target)
+{
+	if (!HasAuthority()) return;
+	if (ATaskButton* TaskButton = Cast<ATaskButton>(Target))
+	{
+		if (AMeowsqueradePlayerState* PS = GetPlayerState<AMeowsqueradePlayerState>())
+		{	
+			TaskButton->ActivateTask(PS->RoleState);
+		}
+	}
 }
 
 void AMeowsqueradePlayerController::BeginPlay()

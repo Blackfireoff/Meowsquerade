@@ -24,6 +24,9 @@ public:
 	/** Constructor */
 	AMeowsqueradePlayerController();
 
+	UFUNCTION(Server, Reliable)
+	void ServerActivateTask(AActor* Target);
+
 protected:
 
 	/** Input Mapping Contexts */

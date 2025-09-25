@@ -2,7 +2,26 @@
 
 
 #include "Public/MeowsqueradeGameState.h"
+#include "Net/UnrealNetwork.h"
 
-#include "MeowsqueradePlayerState.h"
-#include "GameFramework/PlayerState.h"
+AMeowsqueradeGameState::AMeowsqueradeGameState()
+{
+	bReplicates = true;
+}
 
+void AMeowsqueradeGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMeowsqueradeGameState, TaskCount);
+}
+
+void AMeowsqueradeGameState::IncrementTaskCount()
+{
+	++TaskCount;
+}
+
+void AMeowsqueradeGameState::DecrementTaskCount()
+{
+	--TaskCount;
+}
