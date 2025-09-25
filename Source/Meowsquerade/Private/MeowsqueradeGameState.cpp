@@ -28,6 +28,8 @@ void AMeowsqueradeGameState::IncrementTaskCount()
 
 void AMeowsqueradeGameState::DecrementTaskCount()
 {
+	if (TaskCount == 0) return;
+
 	--TaskCount;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Decrementing task count : %d"), TaskCount));
 	UE_LOG(LogTemp, Warning, TEXT("Decrementing task count : %d"), TaskCount);

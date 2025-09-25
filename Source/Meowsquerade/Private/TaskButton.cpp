@@ -39,10 +39,10 @@ void ATaskButton::ActivateTask(const ERoleState RoleState)
 		switch (RoleState)
 		{
 		case ERoleState::Cat:
-			GS->DecrementTaskCount();
+			GS->IncrementTaskCount();
 			break;
 		case ERoleState::Mouse:
-			GS->IncrementTaskCount();
+			GS->DecrementTaskCount();
 			break;
 		default:
 			UE_LOG(LogTemp, Error, TEXT("An unknown role tried to activate a task button!"));
