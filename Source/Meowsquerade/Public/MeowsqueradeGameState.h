@@ -27,5 +27,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Game")
 	void DecrementTaskCount();
+
+	void MouseWinGame();
 	
 };

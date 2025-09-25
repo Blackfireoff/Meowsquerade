@@ -30,3 +30,8 @@ void AMeowsqueradeGameMode::PostLogin(APlayerController* NewPlayer)
 		}
 	}
 }
+
+void AMeowsqueradeGameMode::TravelToLobby()
+{
+	GetWorld()->ServerTravel("Game/Maps/Lvl_Lobby?listen");
+}

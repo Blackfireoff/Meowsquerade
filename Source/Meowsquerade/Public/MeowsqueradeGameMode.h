@@ -20,6 +20,8 @@ public:
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	void TravelToLobby();
+
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game")
