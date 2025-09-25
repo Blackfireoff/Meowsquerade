@@ -3,6 +3,7 @@
 #include "Public/MeowsqueradeGameMode.h"
 
 #include "MeowsqueradePlayerState.h"
+#include "GameFramework/GameStateBase.h"
 
 AMeowsqueradeGameMode::AMeowsqueradeGameMode()
 {
