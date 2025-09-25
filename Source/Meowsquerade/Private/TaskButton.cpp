@@ -14,7 +14,7 @@ ATaskButton::ATaskButton()
 
 	// set the static mesh
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMesh->SetupAttachment(RootComponent);
+	RootComponent = StaticMesh;
 
 }
 
