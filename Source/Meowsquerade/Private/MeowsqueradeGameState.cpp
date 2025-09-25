@@ -19,12 +19,14 @@ void AMeowsqueradeGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 void AMeowsqueradeGameState::IncrementTaskCount()
 {
 	++TaskCount;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Incrementing task count : %d"), TaskCount));
 	UE_LOG(LogTemp, Warning, TEXT("Incrementing task count : %d"), TaskCount);
 }
 
 void AMeowsqueradeGameState::DecrementTaskCount()
 {
 	--TaskCount;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Decrementing task count : %d"), TaskCount));
 	UE_LOG(LogTemp, Warning, TEXT("Decrementing task count : %d"), TaskCount);
 
 }
