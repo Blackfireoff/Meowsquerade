@@ -7,7 +7,7 @@
 
 AMeowsqueradeGameMode::AMeowsqueradeGameMode()
 {
-	
+	bUseSeamlessTravel = true;
 }
 
 void AMeowsqueradeGameMode::PostLogin(APlayerController* NewPlayer)
@@ -33,5 +33,5 @@ void AMeowsqueradeGameMode::PostLogin(APlayerController* NewPlayer)
 
 void AMeowsqueradeGameMode::TravelToLobby()
 {
-	GetWorld()->ServerTravel("Game/Maps/Lvl_Lobby?listen");
+	GetWorld()->ServerTravel("Game/Maps/Lvl_Lobby?listen", true);
 }

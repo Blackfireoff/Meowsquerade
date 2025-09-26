@@ -16,6 +16,8 @@ class MEOWSQUERADE_API ALobbyGameMode : public AGameModeBase
 
 public:
 
+	ALobbyGameMode();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "LobbyGameMode")
 	int32 MinPlayerCount = 2;
 	

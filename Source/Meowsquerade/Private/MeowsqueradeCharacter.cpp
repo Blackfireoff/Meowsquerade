@@ -10,6 +10,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Meowsquerade.h"
 #include "MeowsqueradePlayerController.h"
+#include "SkinButton.h"
+#include "SkinDataAsset.h"
 #include "TaskButton.h"
 
 AMeowsqueradeCharacter::AMeowsqueradeCharacter()
@@ -69,6 +71,44 @@ void AMeowsqueradeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 	{
 		UE_LOG(LogMeowsquerade, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AMeowsqueradeCharacter::SetSkeletonSkin(int32 SkinIndex)
+{
+	if (USkinDataAsset* SkinDataAsset = Cast<USkinDataAsset>(CharacterSkin))
+	{
+		if (USkeletalMesh* NewMesh = Cast<USkeletalMesh>(SkinDataAsset->GetSkinMeshByIndex(SkinIndex)))
+		{
+			GetMesh()->SetSkeletalMesh(NewMesh);
+			FirstPersonMesh->SetSkeletalMesh(NewMesh);
+			if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
+			{
+				AnimInstance->InitializeAnimation();
+			}
+			if (UAnimInstance* FPAnimInstance = FirstPersonMesh->GetAnimInstance())
+			{
+				FPAnimInstance->InitializeAnimation();
+			}
+		}
+		else
+		{
+			UE_LOG(LogMeowsquerade, Error, TEXT("'%s' Failed to find a Skeletal Mesh in the CharacterSkin Data Asset with the name '%d'."), *GetNameSafe(this), SkinIndex);
+		}
+	}
+}
+
+void AMeowsqueradeCharacter::InteractWithTaskButton(ATaskButton* HitTaskButton)
+{
+	if (AMeowsqueradePlayerController* PC = Cast<AMeowsqueradePlayerController>(GetController()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit Task Button: %s"), *HitTaskButton->GetName());
+		PC->ServerActivateTask(HitTaskButton);
+	}
+}
+
+void AMeowsqueradeCharacter::InteractWithSkinButton(ASkinButton* HitSkinButton)
+{
+	ServerSetSkinIndex(HitSkinButton->SkinIndex);
 }
 
 
@@ -142,11 +182,22 @@ void AMeowsqueradeCharacter::InteractInput()
 	{
 		if (ATaskButton* HitTaskButton = Cast<ATaskButton>(Hit.GetActor()))
 		{
-			if (AMeowsqueradePlayerController* PC = Cast<AMeowsqueradePlayerController>(GetController()))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Hit Task Button: %s"), *HitTaskButton->GetName());
-				PC->ServerActivateTask(HitTaskButton);
-			}
+			InteractWithTaskButton(HitTaskButton);
+		} else if (ASkinButton* HitSkinButton = Cast<ASkinButton>(Hit.GetActor()))
+		{
+			InteractWithSkinButton(HitSkinButton);
 		}
+	}
+}
+
+void AMeowsqueradeCharacter::ServerSetSkinIndex_Implementation(int32 NewIndex)
+{
+	if (!HasAuthority()) return;
+	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(GetPlayerState()))
+	{
+		if (PS->SkinIndex == NewIndex) return;
+				
+		PS->SkinIndex = NewIndex;
+		SetSkeletonSkin(NewIndex);
 	}
 }

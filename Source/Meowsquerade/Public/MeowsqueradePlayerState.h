@@ -25,10 +25,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Game")
 	ERoleState RoleState;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_SkinIndex, Category="Game")
+	int32 SkinIndex = 0;
+
 	AMeowsqueradePlayerState();
 
 	virtual void BeginPlay() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void CopyProperties(APlayerState* PlayerState) override;
+
+	UFUNCTION()
+	void OnRep_SkinIndex();
 	
 };

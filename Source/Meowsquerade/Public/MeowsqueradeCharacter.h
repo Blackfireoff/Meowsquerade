@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MeowsqueradePlayerState.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "MeowsqueradeCharacter.generated.h"
 
+class ASkinButton;
+class ATaskButton;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -55,6 +58,9 @@ protected:
 public:
 	AMeowsqueradeCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Skin")
+	UDataAsset* CharacterSkin;
+
 protected:
 
 	/** Called from Input Actions for movement input */
@@ -81,8 +87,6 @@ protected:
 
 	void InteractInput();
 
-protected:
-
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	
@@ -95,5 +99,28 @@ public:
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	void SetSkeletonSkin(int32 SkinIndex);
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetSkinIndex(int32 NewIndex);
+
+	virtual void BeginPlay() override;
+
+private :
+	void InteractWithTaskButton(ATaskButton* HitTaskButton);
+
+	void InteractWithSkinButton(ASkinButton* HitSkinButton);
+
 };
+
+inline void AMeowsqueradeCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(GetPlayerState()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Constructor Skin Index: %d"), PS->SkinIndex);
+		SetSkeletonSkin(PS->SkinIndex);
+	}
+}
 

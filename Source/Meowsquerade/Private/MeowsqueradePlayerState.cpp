@@ -2,17 +2,21 @@
 
 
 #include "Public/MeowsqueradePlayerState.h"
+
+#include "MeowsqueradeCharacter.h"
 #include "Net/UnrealNetwork.h"
 
 AMeowsqueradePlayerState::AMeowsqueradePlayerState()
 {
 	bReplicates = true;
+	
 }
 
 void AMeowsqueradePlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
 }
 
 void AMeowsqueradePlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -20,4 +24,24 @@ void AMeowsqueradePlayerState::GetLifetimeReplicatedProps(TArray<class FLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMeowsqueradePlayerState, RoleState);
+	DOREPLIFETIME(AMeowsqueradePlayerState, SkinIndex);
+}
+
+void AMeowsqueradePlayerState::CopyProperties(APlayerState* PlayerState)
+{
+	Super::CopyProperties(PlayerState);
+
+	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(PlayerState))
+	{
+		PS->SkinIndex = this->SkinIndex;
+		OnRep_SkinIndex();
+	}
+}
+
+void AMeowsqueradePlayerState::OnRep_SkinIndex()
+{
+	if (AMeowsqueradeCharacter* Character = Cast<AMeowsqueradeCharacter>(GetPawn()))
+	{
+		Character->SetSkeletonSkin(SkinIndex);
+	}
 }
