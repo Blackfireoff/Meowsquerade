@@ -22,4 +22,9 @@ public:
 	int32 MinPlayerCount = 2;
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	FTimerHandle TimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "LobbyGameMode")
+	float StartGameDelay = 2.f;
 };

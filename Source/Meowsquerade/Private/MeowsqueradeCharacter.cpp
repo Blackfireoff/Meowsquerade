@@ -46,6 +46,8 @@ AMeowsqueradeCharacter::AMeowsqueradeCharacter()
 	// Configure character movement
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 	GetCharacterMovement()->AirControl = 0.5f;
+	
+	bReplicates = true;
 }
 
 void AMeowsqueradeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -176,7 +178,7 @@ void AMeowsqueradeCharacter::InteractInput()
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	UE_LOG(LogTemp, Warning, TEXT("Line Trace Start: %s, End: %s"), *Start.ToString(), *End.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Line Trace Start: %s, End: %s"), *Start.ToString(), *End.ToString());
 	
 	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
 	{
@@ -199,5 +201,44 @@ void AMeowsqueradeCharacter::ServerSetSkinIndex_Implementation(int32 NewIndex)
 				
 		PS->SkinIndex = NewIndex;
 		SetSkeletonSkin(NewIndex);
+	}
+}
+
+void AMeowsqueradeCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	
+
+	
+}
+
+void AMeowsqueradeCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	UE_LOG(LogTemp, Warning, TEXT("PossessedBy %s  HasAuthority=%d  LocalRole=%d  RemoteRole=%d"),
+	   *GetName(), HasAuthority() ? 1 : 0, (int32)GetLocalRole(), (int32)GetRemoteRole());
+	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(GetPlayerState()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PossessedBy called, setting skin to index: %d, %s"), PS->SkinIndex, *GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 1000.f, FColor::Yellow, FString::Printf(TEXT("BeginPlay called, setting skin to index: %d, %s"), PS->SkinIndex, *GetName()));
+		SetSkeletonSkin(PS->SkinIndex);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("BeginPlay called, but no PlayerState found: %s"), *GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 1000.f, FColor::Red, FString::Printf(TEXT("BeginPlay called, but no PlayerState found: %s"), *GetName()));
+	}
+	
+}
+
+void AMeowsqueradeCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(GetPlayerState()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OnRep_PlayerState called, setting skin to index: %d, %s"), PS->SkinIndex, *GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 1000.f, FColor::Yellow, FString::Printf(TEXT("BeginPlay called, setting skin to index: %d, %s"), PS->SkinIndex, *GetName()));
+		SetSkeletonSkin(PS->SkinIndex);
 	}
 }

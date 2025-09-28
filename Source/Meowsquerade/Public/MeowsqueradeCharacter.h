@@ -89,6 +89,7 @@ protected:
 
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+
 	
 
 public:
@@ -106,6 +107,11 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void OnRep_PlayerState() override;
+	
+
 private :
 	void InteractWithTaskButton(ATaskButton* HitTaskButton);
 
@@ -113,14 +119,5 @@ private :
 
 };
 
-inline void AMeowsqueradeCharacter::BeginPlay()
-{
-	Super::BeginPlay();
 
-	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(GetPlayerState()))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Constructor Skin Index: %d"), PS->SkinIndex);
-		SetSkeletonSkin(PS->SkinIndex);
-	}
-}
 

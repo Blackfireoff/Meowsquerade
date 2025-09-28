@@ -16,6 +16,9 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 
 	if (GameState.Get()->PlayerArray.Num() == MinPlayerCount)
 	{
-		GetWorld()->ServerTravel("/Game/Maps/Lvl_FirstPerson?listen");
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		{
+			GetWorld()->ServerTravel("/Game/Maps/Lvl_FirstPerson?listen");
+		}, StartGameDelay, false);
 	}
 }

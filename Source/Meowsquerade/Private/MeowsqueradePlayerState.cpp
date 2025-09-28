@@ -3,6 +3,7 @@
 
 #include "Public/MeowsqueradePlayerState.h"
 
+#include "EngineUtils.h"
 #include "MeowsqueradeCharacter.h"
 #include "Net/UnrealNetwork.h"
 
@@ -34,14 +35,34 @@ void AMeowsqueradePlayerState::CopyProperties(APlayerState* PlayerState)
 	if (AMeowsqueradePlayerState* PS = Cast<AMeowsqueradePlayerState>(PlayerState))
 	{
 		PS->SkinIndex = this->SkinIndex;
-		OnRep_SkinIndex();
+		PS->OnRep_SkinIndex();
 	}
 }
 
 void AMeowsqueradePlayerState::OnRep_SkinIndex()
 {
-	if (AMeowsqueradeCharacter* Character = Cast<AMeowsqueradeCharacter>(GetPawn()))
+	if (AMeowsqueradeCharacter* Character = Cast<AMeowsqueradeCharacter>(GetAssociatedPawn()))
 	{
 		Character->SetSkeletonSkin(SkinIndex);
 	}
+}
+
+APawn* AMeowsqueradePlayerState::GetAssociatedPawn() const
+{
+	UWorld* World = GetWorld();
+	if (!World)
+	{
+		return nullptr;
+	}
+ 
+	for (TActorIterator<APawn> It(World); It; ++It)
+	{
+		APawn* Pawn = *It;
+		if (Pawn && Pawn->GetPlayerState() == this)
+		{
+			return Pawn;
+		}
+	}
+ 
+	return nullptr;
 }
