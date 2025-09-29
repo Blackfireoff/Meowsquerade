@@ -9,12 +9,30 @@
 #include "Blueprint/UserWidget.h"
 #include "Meowsquerade.h"
 #include "TaskButton.h"
+#include "Net/UnrealNetwork.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
 AMeowsqueradePlayerController::AMeowsqueradePlayerController()
 {
 	// set the player camera manager class
 	PlayerCameraManagerClass = AMeowsqueradeCameraManager::StaticClass();
+
+	bReplicates = true;
+}
+
+void AMeowsqueradePlayerController::Client_ReceiveRoleList_Implementation(const TArray<FPlayerRoleInfo>& RoleList)
+{
+	CachedRoleList = RoleList;
+	UE_LOG(LogTemp, Log, TEXT("Received %d player roles"), CachedRoleList.Num());
+	for (const FPlayerRoleInfo& RoleInfo : CachedRoleList)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Player: %s, Role: %s"), *RoleInfo.PlayerName, *UEnum::GetValueAsString(RoleInfo.Role));
+		GEngine->AddOnScreenDebugMessage(
+				-1,
+				10.f,
+				RoleInfo.Role == EPlayerRole::Mouse ? FColor::Blue : FColor::Red,
+				FString::Printf(TEXT("Le joueur '%s' a pour rôle %s"), *RoleInfo.PlayerName, RoleInfo.Role == EPlayerRole::Mouse ? TEXT("MOUSE") : TEXT("CAT")));
+	}
 }
 
 void AMeowsqueradePlayerController::ServerActivateTask_Implementation(AActor* Target)
@@ -22,11 +40,17 @@ void AMeowsqueradePlayerController::ServerActivateTask_Implementation(AActor* Ta
 	if (!HasAuthority()) return;
 	if (ATaskButton* TaskButton = Cast<ATaskButton>(Target))
 	{
-		if (AMeowsqueradePlayerState* PS = GetPlayerState<AMeowsqueradePlayerState>())
-		{	
-			TaskButton->ActivateTask(PS->RoleState);
-		}
+			TaskButton->ActivateTask(PlayerRole);
 	}
+}
+
+void AMeowsqueradePlayerController::OnRep_PlayerRole()
+{
+	GEngine->AddOnScreenDebugMessage(
+				-1,
+				10.f,
+				PlayerRole == EPlayerRole::Mouse ? FColor::Blue : FColor::Red,
+				FString::Printf(TEXT("Mon rôle est : %s"), PlayerRole == EPlayerRole::Mouse ? TEXT("MOUSE") : TEXT("CAT")));
 }
 
 void AMeowsqueradePlayerController::BeginPlay()
@@ -80,4 +104,11 @@ void AMeowsqueradePlayerController::SetupInputComponent()
 		}
 	}
 	
+}
+
+void AMeowsqueradePlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMeowsqueradePlayerController, PlayerRole);
 }

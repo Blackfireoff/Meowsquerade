@@ -4,6 +4,7 @@
 #include "TaskButton.h"
 
 #include "MeowsqueradeGameState.h"
+#include "MeowsqueradePlayerController.h"
 
 
 // Sets default values
@@ -31,17 +32,17 @@ void ATaskButton::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATaskButton::ActivateTask(const ERoleState RoleState)
+void ATaskButton::ActivateTask(const EPlayerRole RoleState)
 {
 	AMeowsqueradeGameState* GS = GetWorld()->GetGameState<AMeowsqueradeGameState>();
 	if (GS)
 	{
 		switch (RoleState)
 		{
-		case ERoleState::Cat:
+		case EPlayerRole::Cat:
 			GS->IncrementTaskCount();
 			break;
-		case ERoleState::Mouse:
+		case EPlayerRole::Mouse:
 			GS->DecrementTaskCount();
 			break;
 		default:

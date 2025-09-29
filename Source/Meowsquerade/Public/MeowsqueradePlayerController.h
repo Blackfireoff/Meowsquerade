@@ -14,6 +14,26 @@ class UUserWidget;
  *  Manages the input mapping context.
  *  Overrides the Player Camera Manager class.
  */
+
+UENUM(BlueprintType)
+enum class EPlayerRole : uint8
+{
+	Mouse UMETA(DisplayName = "Mouse"),
+	Cat UMETA(DisplayName = "Cat")
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerRoleInfo
+{
+	GENERATED_BODY()
+ 
+	UPROPERTY()
+	FString PlayerName;
+ 
+	UPROPERTY()
+	EPlayerRole Role;
+};
+
 UCLASS(abstract)
 class MEOWSQUERADE_API AMeowsqueradePlayerController : public APlayerController
 {
@@ -24,8 +44,15 @@ public:
 	/** Constructor */
 	AMeowsqueradePlayerController();
 
-	UFUNCTION(Server, Reliable)
-	void ServerActivateTask(AActor* Target);
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_PlayerRole, Category="Game")
+	EPlayerRole PlayerRole;
+
+	UFUNCTION(Client, Reliable)
+	void Client_ReceiveRoleList(const TArray<FPlayerRoleInfo>& RoleList);
+ 
+	// Local cached roles
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FPlayerRoleInfo> CachedRoleList;
 
 protected:
 
@@ -44,10 +71,22 @@ protected:
 	/** Pointer to the mobile controls widget */
 	TObjectPtr<UUserWidget> MobileControlsWidget;
 
+public:
+
+	UFUNCTION(Server, Reliable)
+	void ServerActivateTask(AActor* Target);
+
+	UFUNCTION()
+	void OnRep_PlayerRole();
+
+protected:
+
 	/** Gameplay initialization */
 	virtual void BeginPlay() override;
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MeowsqueradePlayerState.h"
+#include "MeowsqueradePlayerController.h"
 #include "GameFramework/Actor.h"
 #include "TaskButton.generated.h"
 
@@ -27,5 +27,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void ActivateTask(const ERoleState RoleState);
+	void ActivateTask(const EPlayerRole RoleState);
 };

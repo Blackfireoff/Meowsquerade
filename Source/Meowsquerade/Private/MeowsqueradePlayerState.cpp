@@ -23,8 +23,7 @@ void AMeowsqueradePlayerState::BeginPlay()
 void AMeowsqueradePlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AMeowsqueradePlayerState, RoleState);
+	
 	DOREPLIFETIME(AMeowsqueradePlayerState, SkinIndex);
 }
 

@@ -22,10 +22,14 @@ public:
 
 	void TravelToLobby();
 
+	virtual void HandleSeamlessTravelPlayer(AController*& C) override;
+
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game")
 	bool bIsFirstPlayerMouse = true;
+
+	void SendRoleListToMeanPlayers();
 	
 };
 

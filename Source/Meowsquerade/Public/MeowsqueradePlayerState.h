@@ -6,13 +6,6 @@
 #include "GameFramework/PlayerState.h"
 #include "MeowsqueradePlayerState.generated.h"
 
-UENUM(BlueprintType)
-enum class ERoleState : uint8
-{
-	Mouse    UMETA(DisplayName = "Mouse"),
-	Cat UMETA(DisplayName = "Cat")
-};
-
 /**
  * 
  */
@@ -22,8 +15,6 @@ class MEOWSQUERADE_API AMeowsqueradePlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, Category="Game")
-	ERoleState RoleState;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_SkinIndex, Category="Game")
 	int32 SkinIndex = 0;
@@ -38,5 +29,4 @@ public:
 
 	UFUNCTION()
 	void OnRep_SkinIndex();
-	
 };
