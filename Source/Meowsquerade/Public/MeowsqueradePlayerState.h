@@ -38,8 +38,5 @@ public:
 
 	UFUNCTION()
 	void OnRep_SkinIndex();
-
-	UFUNCTION()
-	APawn* GetAssociatedPawn() const;
 	
 };

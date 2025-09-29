@@ -105,8 +105,6 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerSetSkinIndex(int32 NewIndex);
 
-	virtual void BeginPlay() override;
-
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void OnRep_PlayerState() override;

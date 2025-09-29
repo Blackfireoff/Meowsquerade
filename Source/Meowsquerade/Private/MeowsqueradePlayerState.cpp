@@ -41,28 +41,8 @@ void AMeowsqueradePlayerState::CopyProperties(APlayerState* PlayerState)
 
 void AMeowsqueradePlayerState::OnRep_SkinIndex()
 {
-	if (AMeowsqueradeCharacter* Character = Cast<AMeowsqueradeCharacter>(GetAssociatedPawn()))
+	if (AMeowsqueradeCharacter* Character = Cast<AMeowsqueradeCharacter>(GetPawn()))
 	{
 		Character->SetSkeletonSkin(SkinIndex);
 	}
-}
-
-APawn* AMeowsqueradePlayerState::GetAssociatedPawn() const
-{
-	UWorld* World = GetWorld();
-	if (!World)
-	{
-		return nullptr;
-	}
- 
-	for (TActorIterator<APawn> It(World); It; ++It)
-	{
-		APawn* Pawn = *It;
-		if (Pawn && Pawn->GetPlayerState() == this)
-		{
-			return Pawn;
-		}
-	}
- 
-	return nullptr;
 }
