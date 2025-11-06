@@ -19,8 +19,23 @@ UENUM(BlueprintType)
 enum class EPlayerRole : uint8
 {
 	Mouse UMETA(DisplayName = "Mouse"),
-	Cat UMETA(DisplayName = "Cat")
+	Cat UMETA(DisplayName = "Cat"),
+	None UMETA(DisplayName = "None")
 };
+
+namespace PlayerRoleUtils
+{
+	inline FString ToString(const EPlayerRole Role)
+	{
+		switch (Role)
+		{
+			case EPlayerRole::Mouse: return "Mouse";
+			case EPlayerRole::Cat: return "Cat";
+			case EPlayerRole::None: return "None";
+			default: return "Unknown";
+		}
+	}
+}
 
 USTRUCT(BlueprintType)
 struct FPlayerRoleInfo
@@ -33,6 +48,8 @@ struct FPlayerRoleInfo
 	UPROPERTY()
 	EPlayerRole Role;
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleChanged, EPlayerRole, NewRole);
 
 UCLASS(abstract)
 class MEOWSQUERADE_API AMeowsqueradePlayerController : public APlayerController
@@ -53,6 +70,9 @@ public:
 	// Local cached roles
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FPlayerRoleInfo> CachedRoleList;
+
+	UPROPERTY(BlueprintAssignable, Category="Events")
+	FOnRoleChanged OnRoleChanged;
 
 protected:
 

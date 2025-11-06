@@ -46,11 +46,7 @@ void AMeowsqueradePlayerController::ServerActivateTask_Implementation(AActor* Ta
 
 void AMeowsqueradePlayerController::OnRep_PlayerRole()
 {
-	GEngine->AddOnScreenDebugMessage(
-				-1,
-				10.f,
-				PlayerRole == EPlayerRole::Mouse ? FColor::Blue : FColor::Red,
-				FString::Printf(TEXT("Mon rôle est : %s"), PlayerRole == EPlayerRole::Mouse ? TEXT("MOUSE") : TEXT("CAT")));
+	OnRoleChanged.Broadcast(PlayerRole);
 }
 
 void AMeowsqueradePlayerController::BeginPlay()
